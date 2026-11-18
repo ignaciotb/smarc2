@@ -8,6 +8,9 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.substitutions import Command
+import xacro
+from ament_index_python.packages import get_package_share_directory
+import os
 
 # TODO: this can be writen more beautifully
 def generate_launch_description():
@@ -52,7 +55,7 @@ def generate_launch_description():
 
 
     # Bluerov model for visualization
-    robot_name = "saabmarine"
+    robot_name = "itrl_rov_1"
     brov_package_dir = FindPackageShare(LaunchConfiguration('brov_package'))
     brov_path = PathJoinSubstitution([brov_package_dir, LaunchConfiguration('brov_package_path')])
 
@@ -70,6 +73,15 @@ def generate_launch_description():
                                         ]
                                       )
 
+    ld.add_action(robot_state_publisher_node_1)
+
+    robot_state_publisher_node_1 = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        name="robot_state_publisher",
+        parameters=[{"robot_description": xacro.process_file(os.path.join(get_package_share_directory("brov2heavy_description"), "robots", "brov2heavy_default.urdf.xacro")).toxml()}],
+        remappings=[('robot_description', 'brov2heavy_description'),])
+    
     ld.add_action(robot_state_publisher_node_1)
 
     # Watertank model

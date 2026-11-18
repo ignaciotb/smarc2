@@ -10,13 +10,11 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import ThisLaunchFileDir
 from launch.actions import ExecuteProcess
 import xacro
-import os
-from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
 
     return LaunchDescription([
-        
+
         # Qualisys driver
         GroupAction([
             PushRosNamespace('mocap'),
@@ -26,7 +24,7 @@ def generate_launch_description():
                 'server_address': '192.168.32.32',
                 'fixed_frame_id': 'mocap'}.items()
             ),
-        ]),   
+        ]),         
 
         # RVIZ2 + robot models come in this launch file
         # TODO: modify to add more than one Bluerov with different names
@@ -35,7 +33,7 @@ def generate_launch_description():
         launch_arguments={
             'sam_package': 'sam_description',
             'sam_package_path': PathJoinSubstitution(['robots', 'sam_auv_default.urdf.xacro']),
-            'brov_name': 'itrl_rov_1',
+            'brov_name': 'mr_pinchy',
             'brov_package': 'brov2heavy_description',
             'brov_package_path': PathJoinSubstitution(['robots', 'brov2heavy_default.urdf.xacro']),
             'tank_package': 'watertank_description',
