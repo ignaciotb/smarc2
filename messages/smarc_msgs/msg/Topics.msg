@@ -16,7 +16,13 @@ string DEPTH_TOPIC = 'smarc/depth' #float32
 string ALTITUDE_TOPIC = 'smarc/altitude' #float32
 string BT_STATUS_TOPIC = 'smarc/bt_status' #string
 
+string HUMAN_LOG_TOPIC = 'smarc/human_log' #string
+string HUMAN_LOG_SIGNAL_TOPIC = 'smarc/human_log/signal' #bool
 
+
+string CHECK_GEOFENCE_SERVICE_TOPIC = 'smarc/srv/check_geofence' # geographic_msgs/srv/GetGeoPath
+string GEOFENCE_STATUS_TOPIC = 'smarc/geofence_status' # smarc_msgs/msg/GeofenceStatusStamped
+string GEOFENCE_POLYGONS_TOPIC = 'smarc/geofence_polygons' #smarc_msgs/msg/GeofencePolygonsStamped
 
 ################
 # WARA-PS Topics
@@ -51,16 +57,3 @@ string WARA_PS_ABORT_TOPIC = 'waraps/abort'
 
 # Action Server Heartbeat
 string WARA_PS_ACTION_SERVER_HB_TOPIC = 'waraps/action_server_heartbeat'
-
-
-
-
-################
-# DEPRECATED TOPICS - to be removed
-################
-#string BATTERY_TOPIC = 'core/battery'
-string GPS_TOPIC = 'core/gps'
-#string HEADING_TOPIC = 'core/heading'
-#string ABORT_TOPIC = 'core/abort'
-string HEARTBEAT_TOPIC = 'core/heartbeat'
-string VEHICLE_READY_TOPIC = 'core/vehicle_ready'

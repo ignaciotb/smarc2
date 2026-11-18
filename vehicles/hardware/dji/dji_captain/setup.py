@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+from glob import glob
 
 package_name = 'dji_captain'
 
@@ -10,6 +11,11 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', glob('launch/*.launch*')),
+        ('share/' + package_name + '/models/M350/continuous_model', glob('models/M350/continuous_model/**')),
+        ('share/' + package_name + '/models/M350/discrete_model', glob('models/M350/discrete_model/**')),
+        ('share/' + package_name + '/models/FC30/continuous_model', glob('models/FC30/continuous_model/**')),
+        ('share/' + package_name + '/models/FC30/discrete_model', glob('models/FC30/discrete_model/**')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -21,7 +27,10 @@ setup(
     entry_points={
         'console_scripts': [
             'dji_captain = dji_captain.dji_captain:main',
+            'esc_splitter = dji_captain.dji_esc_data_splitter:main',
+            'service_caller = dji_captain.dji_service_caller:main',
             'joy_tester = dji_captain.joy_tester:main',
+            'psdk_faker = dji_captain.psdk_faker:main',
         ],
     },
 )

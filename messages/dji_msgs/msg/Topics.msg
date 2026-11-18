@@ -1,38 +1,94 @@
 # Used by the dji_captain, namespaced as needed.
 # Usually under /M350
 
-# moving around
-string MOVE_TO_SETPOINT_TOPIC = 'move_to_setpoint' # PoseStamped
-string LABELED_UTM_TOPIC = 'labeled_utm_topic' # String, formatted: "utm_{zone}_{band}"
+# Status strings, for human-readable strings in topics
+# Captain's status string
+string CAPTAIN_STATUS_STR_TOPIC = 'status_str/captain_status'
+string ALARS_BT_STATUS_STR_TOPIC = 'status_str/alars_bt'
+string ALARS_PING_SEARCH_STATUS_STR_TOPIC = 'status_str/ping_search'
 
-# user feedback
-string CONTROLLER_INPUT_TOPIC = 'joy' # Joy
-string CONTROLLER_VIBRATION_TOPIC = 'joy/set_feedback' # JoyFeedback
-string TTS_TOPIC = 'speak' # String
+# moving around
+string MOVE_TO_SETPOINT_TOPIC = 'move_base' # PoseStamped
+string VELOCITY_SETPOINT_TOPIC = 'cmd_vel' # TwistStamped
+
+string LABELED_UTM_TOPIC = 'labeled_utm_topic' # String, formatted: "utm_{zone}_{band}"
+string BASE_LINK_IN_MAP_TOPIC = 'base_link_in_map' # PoseStamped with header.frame_id == /robot_name/map
+
 
 # cameras
 string GIMBAL_CAMERA_RAW_TOPIC = 'gimbal_camera/camera/image_raw' # Image
+string GIMBAL_CAMERA_INFO_TOPIC = 'gimbal_camera/camera/camera_info' #CameraInfo
 string FISHEYE_CAMERA_RAW_TOPIC = 'fisheye_camera/camera/image_raw' # Image
+string FISHEYE_CAMERA_INFO_TOPIC = 'fisheye_camera/camera/camera_info' #CameraInfo
+
+
+# sensors that are not coming from PSDK
+string LOAD_CELL_RAW_TOPIC = 'sensor/load_cell_raw' # Int32
+string LOAD_CELL_WEIGHT_TOPIC = 'sensor/load_cell_weight' # Float32
+string HOOK_DEPTH_TOPIC = 'sensor/hook_depth' # Float32
+string SUCCOR_ESTIMATE_TOPIC = 'sensor/succorfish_geopoint' #GeoPointStamped
+
+
+# propeller rpms all Float32, corresponds to esc_data[0..3] in this order
+string PROP_RPM_FR = 'sensor/props/fr'
+string PROP_RPM_FL = 'sensor/props/fl'
+string PROP_RPM_BL = 'sensor/props/bl'
+string PROP_RPM_BR = 'sensor/props/br'
+# bottom ones for FC30
+string PROP_RPM_FR_BOTTOM = 'sensor/props/frb'
+string PROP_RPM_FL_BOTTOM = 'sensor/props/flb'
+string PROP_RPM_BL_BOTTOM = 'sensor/props/blb'
+string PROP_RPM_BR_BOTTOM = 'sensor/props/brb'
+
+
+
 
 # object detectors in normalized image coordinates [-1,1]
 # (0,0) is the center of the image, +x is right, +y is up!
 # If this is not the case, FIX IT.
 string ESTIMATED_BUOY_TOPIC = 'alars_detection/buoy' # PointStamped, 
 string ESTIMATED_AUV_TOPIC = 'alars_detection/auv' # PointStamped
-string ESTIMATED_MIDDLE_TOPIC = 'alars_detection/middle' # PointStamped
-string ESTIMATED_CNN_HOOK_ANCHOR_TOPIC = 'alars_detection/cnn' # PointStamped
-string ESTIMATED_CNN_AFTER_CATCH_FLY_DIRECTION_TOPIC = 'alars_detection/cnn_vec' # PointStamped
+string ESTIMATED_AUV_OBB_TOPIC = "alars_detection/auv_obb" # PolygonStamped
+string ESTIMATED_AUV_HEAD_TOPIC = "alars_detection/auv_head" # PolygonStamped
+string ESTIMATED_BUOY_OBB_TOPIC = "alars_detection/buoy_obb" # PolygonStamped
+# instead of captain subbing to image and so on
+# let the consumer of camera data tell it if the camera is good, detection can happen etc.
+string CAM_PROCESSOR_HAPPY_TOPIC = 'alars_detection/cam_processor_happy' # Bool
 
-# object detectors in 3D
-string ESTIMATED_HOOK_TOPIC = 'alars_detection/hook_est' #PoseStamped
-string ESTIMATED_EKF_HOOK_TOPIC = 'alars_detection/hook_ekf' #PoseStamped
+# Topic for publishing detected objects (excluding SAM and buoy) as labeled OBBs.
+# Each message contains Polygon[] obbs and string[] ids (class names).
+string LABELED_OBBS_TOPIC="alars_detection/labeled_obbs"
+
+# projected points
+string PROJECTED_AUV_HEAD_TOPIC = 'alars_projection/auv_head' # PolygonStamped
+string PROJECTED_AUV_OBB_TOPIC = 'alars_projection/auv_obb' # PolygonStamped
+string PROJECTED_BUOY_OBB_TOPIC = 'alars_projection/buoy_obb' # PolygonStamped
+string PROJECTED_AUV_POSE_WITH_COV_TOPIC = 'alars_projection/auv_pose_with_cov' # PoseWithCovarianceStamped 
+string PROJECTED_BUOY_POSE_WITH_COV_TOPIC = 'alars_projection/buoy_pose_with_cov' # PoseWithCovarianceStamped
+
 
 # services
 string ENABLE_ALARS_DETECTOR_SERVICE_TOPIC = 'enable_alars_detector' # Trigger
 string DISABLE_ALARS_DETECTOR_SERVICE_TOPIC = 'disable_alars_detector' # Trigger
-string ENABLE_HOOK_ESTIMATOR_SERVICE_TOPIC = 'enable_hook_estimator' # Trigger
-string DISABLE_HOOK_ESTIMATOR_SERVICE_TOPIC = 'disable_hook_estimator' # Trigger
 
-# sensors that are not coming from PSDK
-string LOAD_CELL_RAW_TOPIC = 'sensor/load_cell_raw' # Int32
-string LOAD_CELL_WEIGHT_TOPIC = 'sensor/load_cell_weight' # Float32
+# Multi-object estimation outputs.
+string PROJECTED_OBJECT_POSES_ARRAY_TOPIC = 'alars_projection/object_poses_array' # dji_msgs/ObjectPoseWithCovarianceArray
+string OBJECT_EKF_STATUS_ARRAY_TOPIC = 'alars_ekf/status_array' # dji_msgs/ObjectEkfStatusArray
+string OBJECT_EKF_RESET_SERVICE = 'alars_ekf/reset' # dji_msgs/ResetObjectEkf
+
+# Only for visualization
+string OBJECT_EKF_MARKERS_TOPIC = 'alars_projection/object_pose_markers' # visualization_msgs/MarkerArray
+
+# Hook Kalman Filter Topics 
+string HOOK_STATE_CARTESIAN = "alars_hook_kf/hook_state" # nav_msgs.msg/Odometry                -- hook estimate in cartesian coordinates 
+string HOOK_STATE_ANGULAR = "alars_hook_kf/hook_swing_state" # nav_msgs.msg/Odometry            -- hook state estimate in angular coordinates, needed for LQG controller 
+string HOOK_RAW_MEASUREMENT = "alars_hook_kf/hook_raw_measurement" # sensor_msgs.msg/JointState -- takes the yolo measurement and compute the hook position, needed for diagnostic
+string YOLO_DETECTIONS = "yolo/detections" # yolo_msgs.msg/DetectionArray
+
+# Hook Parameters
+string HOOK_PENDULUM_PARAMETERS = "alars_pendulum/hook_pendulum_parameters" # std_msgs.msg/Float64MultiArray
+# Raw sysid output: estimate_length_and_damping -> hook_kalman_filter_node. 
+string HOOK_PENDULUM_PARAMETERS_IDENTIFIED = "alars_pendulum/hook_pendulum_parameters_identified" # std_msgs.msg/Float64MultiArray
+
+# Move_to_damped Topics 
+string CMD_VELOCITY_DRONE_FRAME = "alars_move_to_damped/cmd_vel_drone_frame" # geometry_msgs.msg/Vector3Stamped
