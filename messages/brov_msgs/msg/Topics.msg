@@ -6,13 +6,10 @@
 # through mavros, so these names mirror the mavros topic layout.
 
 ####################
-# Flight controller I/O (mavros)
-#
-# Relative names: they resolve inside whatever namespace the node is pushed
-# into, the same way mavros' own topics do.
+# Flight controller I/O (mavros) in sim
 ####################
-string RC_OVERRIDE_TOPIC = 'mavros/rc/override'    # Type: mavros_msgs/OverrideRCIn
-string MAVROS_STATE_TOPIC = 'mavros/state'         # Type: mavros_msgs/State
+string RC_OVERRIDE_TOPIC = '/BlueROV2_Heavy/mavros/rc/override'    # Type: mavros_msgs/OverrideRCIn
+string MAVROS_STATE_TOPIC = 'mavros/state'         # Type: mavros_msgs/State. Not necessary
 
 ####################
 # Vehicle-namespaced topics.
